@@ -5,7 +5,7 @@ FB UNI · Análise de Algoritmos · 2026
 
 Versão em PDF: [`relatorio/relatorio.pdf`](relatorio/relatorio.pdf)
 
-> **Reprodutibilidade.** `src/kmeans.bend` (algoritmo), `scripts/referencia.py` e `scripts/validar.py` (referência em Python e conferência), `scripts/medir.py` e `scripts/caso_medio.py` (medições, em `dados/`), `relatorio/figuras.py` (figuras). Todas as medições num Apple M4 Pro (8 núcleos de desempenho e 4 de eficiência) com Bend 2.0.36; no 2.0.37 a conferência passa igual e os tempos variam menos de 5%. Como rodar: [no fim desta página](#como-rodar).
+> **Reprodutibilidade.** `src/kmeans.bend` (algoritmo), `scripts/referencia.py` e `scripts/validar.py` (referência em Python e conferência), `scripts/medir.py` e `scripts/caso_medio.py` (medições, em `dados/`), `scripts/caso_medio_python.py` (as mesmas 400 execuções só em Python, sem o Bend, com resultados idênticos), `relatorio/figuras.py` (figuras). Todas as medições num Apple M4 Pro (8 núcleos de desempenho e 4 de eficiência) com Bend 2.0.36; no 2.0.37 a conferência passa igual e os tempos variam menos de 5%. Como rodar: [no fim desta página](#como-rodar).
 
 ## Resumo
 
@@ -167,7 +167,7 @@ Duas extensões ficaram de fora: testar dimensões $d > 2$ (a análise vale para
 
 ## Como rodar
 
-Requer [Bend](https://bend-lang.com) 2.0.36 ou mais novo, Python 3 e, para o PDF, [Typst](https://typst.app). Os comandos rodam na raiz do repositório.
+Requer [Bend](https://bend-lang.com) 2.0.36 ou mais novo, Python 3 (com numpy para `caso_medio_python.py`) e, para o PDF, [Typst](https://typst.app). Os comandos rodam na raiz do repositório.
 
 ```sh
 # compilar (no macOS, usar o cc da Apple) e assinar o binário
@@ -179,6 +179,7 @@ CC=/usr/bin/cc bend src/kmeans.bend -o kmeans && codesign -f -s - kmeans
 python3 scripts/validar.py      # confere com a referência em Python
 python3 scripts/medir.py        # tempo por iteração (imprime os CSVs)
 python3 scripts/caso_medio.py   # 400 execuções, grava em dados/
+python3 scripts/caso_medio_python.py   # as mesmas 400 só em Python (numpy), confere com o Bend
 
 # relatório
 python3 relatorio/figuras.py && typst compile relatorio/relatorio.typ
@@ -197,6 +198,7 @@ scripts/      Python
   validar.py        confere o binário contra a referência
   medir.py          tempo por iteração variando n, k e núcleos
   caso_medio.py     400 execuções para o caso médio e a curva do custo J
+  caso_medio_python.py  o mesmo caso médio só em Python (numpy), idêntico ao Bend
 dados/        os CSVs medidos, lidos por relatorio/figuras.py
 relatorio/    o relatório em Typst, as referências, as figuras e o PDF
 ```
